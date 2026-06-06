@@ -25,5 +25,10 @@ enum class Difficulty {
 enum class FoodType {
     Apple,
     Gem,
-    Star
+    Star,
+    Ring,
+    Bolt,
+    Plus,
+    Coin,
+    Crown
 };

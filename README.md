@@ -7,7 +7,7 @@
 - Colored snake, food, and borders
 - Wall wrapping
 - Increasing speed as score rises
-- Multiple food types with different point values
+- Eight food types with different point values
 - Persistent high score tracking in `.highscore`
 - Start screen with difficulty selection
 - Game over screen with restart option

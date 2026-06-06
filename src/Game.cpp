@@ -96,8 +96,8 @@ void Game::update() {
 }
 
 void Game::spawnFood() {
-    std::uniform_int_distribution<int> xDist(0, boardWidth_ - 1);
-    std::uniform_int_distribution<int> yDist(0, boardHeight_ - 1);
+    std::uniform_int_distribution<int> xDist(1, boardWidth_ - 2);
+    std::uniform_int_distribution<int> yDist(1, boardHeight_ - 2);
 
     Position pos {};
     do {
@@ -109,15 +109,22 @@ void Game::spawnFood() {
 }
 
 FoodType Game::randomFoodType() {
-    std::uniform_int_distribution<int> dist(1, 100);
-    const int roll = dist(rng_);
-    if (roll <= 55) {
-        return FoodType::Apple;
+    int totalWeight = 0;
+    for (const auto& definition : kFoodDefinitions) {
+        totalWeight += definition.spawnWeight;
     }
-    if (roll <= 85) {
-        return FoodType::Gem;
+
+    std::uniform_int_distribution<int> dist(1, totalWeight);
+    int roll = dist(rng_);
+
+    for (const auto& definition : kFoodDefinitions) {
+        roll -= definition.spawnWeight;
+        if (roll <= 0) {
+            return definition.type;
+        }
     }
-    return FoodType::Star;
+
+    return kFoodDefinitions.front().type;
 }
 
 int Game::currentDelay() const {

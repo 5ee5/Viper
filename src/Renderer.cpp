@@ -13,11 +13,8 @@ constexpr short kColorTitle = 1;
 constexpr short kColorBorder = 2;
 constexpr short kColorSnakeHead = 3;
 constexpr short kColorSnakeBody = 4;
-constexpr short kColorApple = 5;
-constexpr short kColorGem = 6;
-constexpr short kColorStar = 7;
-constexpr short kColorHighlight = 8;
-constexpr short kColorInfo = 9;
+constexpr short kColorHighlight = 13;
+constexpr short kColorInfo = 14;
 
 const char* difficultyLabel(Difficulty difficulty) {
     switch (difficulty) {
@@ -29,18 +26,6 @@ const char* difficultyLabel(Difficulty difficulty) {
             return "Hard";
     }
     return "Normal";
-}
-
-short foodColor(FoodType type) {
-    switch (type) {
-        case FoodType::Apple:
-            return kColorApple;
-        case FoodType::Gem:
-            return kColorGem;
-        case FoodType::Star:
-            return kColorStar;
-    }
-    return kColorApple;
 }
 
 }  // namespace
@@ -97,9 +82,10 @@ void Renderer::drawGame(const Snake& snake, const FrameData& frame) const {
         attroff(COLOR_PAIR(kColorBorder));
     }
 
-    attron(COLOR_PAIR(foodColor(frame.currentFood.type)) | A_BOLD);
+    const FoodDefinition& currentFood = foodDefinition(frame.currentFood.type);
+    attron(COLOR_PAIR(currentFood.colorPair) | A_BOLD);
     mvaddch(frame.currentFood.position.y + 3, frame.currentFood.position.x + 2, frame.currentFood.glyph());
-    attroff(COLOR_PAIR(foodColor(frame.currentFood.type)) | A_BOLD);
+    attroff(COLOR_PAIR(currentFood.colorPair) | A_BOLD);
 
     const auto& segments = snake.segments();
     for (std::size_t i = 0; i < segments.size(); ++i) {
@@ -111,8 +97,9 @@ void Renderer::drawGame(const Snake& snake, const FrameData& frame) const {
     }
 
     attron(COLOR_PAIR(kColorInfo));
-    mvprintw(27, 2, "Controls: Arrows/WASD   Food: @=1  $=3  *=5   Wrap through walls.");
-    mvprintw(28, 2, "Avoid your body.");
+    mvprintw(27, 2, "Controls: Arrows/WASD   Wrap through walls. Avoid your body.");
+    mvprintw(28, 2, "@=1 Apple  $=3 Gem  *=5 Star  0=7 Ring");
+    mvprintw(29, 2, "!=9 Bolt  +=11 Plus  &=13 Coin  ^=15 Crown");
     attroff(COLOR_PAIR(kColorInfo));
     refresh();
 }
@@ -151,9 +138,14 @@ void Renderer::initColors() const {
     init_pair(kColorBorder, COLOR_CYAN, -1);
     init_pair(kColorSnakeHead, COLOR_YELLOW, -1);
     init_pair(kColorSnakeBody, COLOR_GREEN, -1);
-    init_pair(kColorApple, COLOR_RED, -1);
-    init_pair(kColorGem, COLOR_MAGENTA, -1);
-    init_pair(kColorStar, COLOR_YELLOW, -1);
+    init_pair(5, COLOR_RED, -1);
+    init_pair(6, COLOR_MAGENTA, -1);
+    init_pair(7, COLOR_YELLOW, -1);
+    init_pair(8, COLOR_CYAN, -1);
+    init_pair(9, COLOR_BLUE, -1);
+    init_pair(10, COLOR_GREEN, -1);
+    init_pair(11, COLOR_YELLOW, -1);
+    init_pair(12, COLOR_WHITE, -1);
     init_pair(kColorHighlight, COLOR_WHITE, COLOR_BLUE);
     init_pair(kColorInfo, COLOR_WHITE, -1);
 }
