@@ -11,7 +11,7 @@ struct FrameData {
     int score {};
     int highScore {};
     Difficulty difficulty {Difficulty::Normal};
-    int speedMs {};
+    int speedLevel {};
     Food currentFood {};
     std::vector<Position> borders;
 };

@@ -32,7 +32,11 @@ GameResult Game::run() {
         frame.score = score_;
         frame.highScore = std::max(highScore_, score_);
         frame.difficulty = difficulty_;
-        frame.speedMs = currentDelay();
+        const int baseDelay = config::delayForDifficulty(difficulty_);
+        const int range = baseDelay - config::kMinFrameDelayMs;
+        frame.speedLevel = (range > 0)
+            ? std::clamp(1 + 9 * (baseDelay - currentDelay()) / range, 1, 10)
+            : 1;
         frame.currentFood = food_;
         frame.borders = buildBorders();
         renderer_.drawGame(snake_, frame);

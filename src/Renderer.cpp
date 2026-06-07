@@ -73,7 +73,7 @@ void Renderer::drawGame(const Snake& snake, const FrameData& frame) const {
     mvprintw(1, 2, "Score: %d", frame.score);
     mvprintw(1, 16, "Best: %d", frame.highScore);
     mvprintw(1, 30, "Mode: %s", difficultyLabel(frame.difficulty));
-    mvprintw(1, 44, "Speed: %dms", frame.speedMs);
+    mvprintw(1, 44, "Speed: %d/10", frame.speedLevel);
     attroff(COLOR_PAIR(kColorInfo));
 
     for (const Position& border : frame.borders) {
